@@ -14,7 +14,7 @@ class postgresql::centos::v8-4 {
 
   $version = "84"
 
-  case $lsbmajdistreelease {
+  case $lsbmajdistrelease {
     "5" : {
 
       include postgresql::centos::base
