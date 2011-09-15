@@ -6,7 +6,7 @@ This class is dedicated to the common parts
 shared by the different flavors of Debian
 
 */
-class postgresql::debian::base inherits postgresql::base {
+class postgresql::centos::base inherits postgresql::base {
 
   include postgresql::params
 
