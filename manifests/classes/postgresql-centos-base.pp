@@ -25,6 +25,7 @@ class postgresql::centos::base inherits postgresql::base {
   }
 
   exec {"drop initial cluster":
+	path		=> "/bin:/sbin:/usr/bin:/usr/sbin",
     command     => "pg_dropcluster --stop ${version} main",
     onlyif      => "test \$(su -c 'psql -lx' postgres |awk '/Encoding/ {printf tolower(\$3)}') = 'sql_asciisql_asciisql_ascii'",
     timeout     => 60,
