@@ -18,6 +18,8 @@ define postgresql::cluster (
   case $ensure {
     present: {
 
+	Exec { path => "/bin:/sbin:/usr/bin:/usr/sbin" }
+
       file {$data_dir:
         ensure  => directory,
         owner   => "postgres",

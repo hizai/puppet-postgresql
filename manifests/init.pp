@@ -52,6 +52,12 @@ class postgresql::v8-4 {
         default: { fail "postgresql 8.4 not available for ${operatingsystem}/${lsbdistcodename}"}
       }
     }
+	Centos: {
+      case $lsbmajdistrelease {
+        '5': { include postgresql::centos::v8-4 }
+        default: { fail "postgresql module not implemented for ${operatingsystem}-$lsbmajdistrelease"}
+      }
+    }
     default: { notice "Unsupported operatingsystem ${operatingsystem}" }
   }
 }

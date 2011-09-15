@@ -14,20 +14,21 @@ class postgresql::centos::v8-4 {
 
   $version = "84"
 
-  case $lsbmajdistreelease {
+  case $lsbmajdistrelease {
     "5" : {
 
       include postgresql::centos::base
 
+      Service["postgresql"] {
+        start   => "/sbin/service postgresql start",
+        status  => "/sbin/service postgresql status",
+        stop    => "/sbin/service postgresql stop",
+        restart => "/sbin/service postgresql restart",
+      }
+
       service {"postgresql":
         ensure    => running,
-        enable    => true,
-        hasstatus => true,
-        start     => "/etc/init.d/postgresql start ${version}",
-        status    => "/etc/init.d/postgresql status ${version}",
-        stop      => "/etc/init.d/postgresql stop ${version}",
-        restart   => "/etc/init.d/postgresql restart ${version}",
-        require   => Package["postgresql-server"],
+        require   => [Package["postgresql-server"], Exec["init-db"]]
       }
 
       package { "postgresql-server":

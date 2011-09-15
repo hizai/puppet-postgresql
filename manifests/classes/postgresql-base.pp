@@ -38,7 +38,8 @@ class postgresql::base {
   if versioncmp($augeasversion, '0.7.3') < 0 { $lens = present }
   else { $lens = absent }
 
-  file { "/usr/share/augeas/lenses/contrib/pg_hba.aug":
+  file { "pg_hba.aug":
+	name => "/usr/share/augeas/lenses/contrib/pg_hba.aug",
     ensure => $lens,
     mode   => 0644,
     owner  => "root",
