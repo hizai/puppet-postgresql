@@ -31,6 +31,7 @@ class postgresql::centos::base inherits postgresql::base {
   exec { "init-db":
     command => "/sbin/service postgresql initdb",
     require => [Package["postgresql"], Package["postgresql-server"]],
-    unless => "/bin/su postgres -c '/usr/bin/pg_ctl status -D /var/lib/pgsql/data'",
+#   unless => "/bin/su postgres -c '/usr/bin/pg_ctl status -D /var/lib/pgsql/data'",
+	unless => "/bin/su postgres -c 'test -d /var/lib/pgsql/data'",
   } 
 }
