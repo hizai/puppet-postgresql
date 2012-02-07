@@ -52,7 +52,7 @@ define postgresql::user(
         },
         user    => "postgres",
         unless  => "psql ${connection} -c '\\du' | egrep '^  *$name '",
-        require => Postgresql::Cluster["main"],
+#        require => Postgresql::Cluster["main"],
       }
 
       exec { "Set SUPERUSER attribute for postgres user $name":
@@ -98,7 +98,7 @@ define postgresql::user(
         command => "psql ${connection} -c 'DROP USER \"$name\" ' ",
         user    => "postgres",
         onlyif  => "psql ${connection} -c '\\du' | grep '$name  *|'",
-        require => Postgresql::Cluster["main"],
+#        require => Postgresql::Cluster["main"],
       }
     }
 
