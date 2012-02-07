@@ -81,7 +81,7 @@ define postgresql::hba (
   }
 
   if versioncmp($augeasversion, '0.7.3') < 0 {
-    $lpath = "/usr/share/augeas/lenses/contrib/"
+    $lpath = "/usr/share/augeas/lenses/dist/"
   } else {
     $lpath = undef
   }
@@ -94,7 +94,7 @@ define postgresql::hba (
         changes => $changes,
         onlyif  => "match ${xpath} size == 0",
         notify  => Service["postgresql"],
-        require => [Package["postgresql${pgver}-server"], File["/usr/share/augeas/lenses/contrib/pg_hba.aug"]],
+        require => [Package["postgresql${pgver}-server"], File["/usr/share/augeas/lenses/dist/pg_hba.aug"]],
         load_path => $lpath,
       }
 
@@ -104,7 +104,7 @@ define postgresql::hba (
           changes => "set ${xpath}/method/option ${option}",
           onlyif  => "match ${xpath}/method/option size == 0",
           notify  => Service["postgresql"],
-          require => [Augeas["set pg_hba ${name}"], File["/usr/share/augeas/lenses/contrib/pg_hba.aug"]],
+          require => [Augeas["set pg_hba ${name}"], File["/usr/share/augeas/lenses/dist/pg_hba.aug"]],
           load_path => $lpath,
         }
       }
@@ -116,7 +116,7 @@ define postgresql::hba (
         changes => "rm ${xpath}",
         onlyif  => "match ${xpath} size == 1",
         notify  => Service["postgresql"],
-        require => [Package["postgresql${pgver}-server"], File["/usr/share/augeas/lenses/contrib/pg_hba.aug"]],
+        require => [Package["postgresql${pgver}-server"], File["/usr/share/augeas/lenses/dist/pg_hba.aug"]],
         load_path => $lpath,
       }
     }
