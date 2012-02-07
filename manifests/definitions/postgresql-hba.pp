@@ -94,7 +94,7 @@ define postgresql::hba (
         changes => $changes,
         onlyif  => "match ${xpath} size == 0",
         notify  => Service["postgresql"],
-        require => [Package["postgresql-${pgver}"], File["/usr/share/augeas/lenses/contrib/pg_hba.aug"]],
+        require => [Package["postgresql${pgver}-server"], File["/usr/share/augeas/lenses/contrib/pg_hba.aug"]],
         load_path => $lpath,
       }
 
@@ -116,7 +116,7 @@ define postgresql::hba (
         changes => "rm ${xpath}",
         onlyif  => "match ${xpath} size == 1",
         notify  => Service["postgresql"],
-        require => [Package["postgresql-${pgver}"], File["/usr/share/augeas/lenses/contrib/pg_hba.aug"]],
+        require => [Package["postgresql${pgver}-server"], File["/usr/share/augeas/lenses/contrib/pg_hba.aug"]],
         load_path => $lpath,
       }
     }
