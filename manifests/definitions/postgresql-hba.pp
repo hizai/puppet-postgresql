@@ -90,7 +90,7 @@ define postgresql::hba (
 
     'present': {
       augeas { "set pg_hba ${name}":
-        context => "/files/var/lib/pgsql/data/pg_hba.conf/",
+        context => "/files/var/lib/pgsql/data/",
         changes => $changes,
         onlyif  => "match ${xpath} size == 0",
         notify  => Service["postgresql"],
@@ -100,7 +100,7 @@ define postgresql::hba (
 
       if $option {
         augeas { "add option to pg_hba ${name}":
-          context => "/files/var/lib/pgsql/data/pg_hba.conf/",
+          context => "/files/var/lib/pgsql/data/",
           changes => "set ${xpath}/method/option ${option}",
           onlyif  => "match ${xpath}/method/option size == 0",
           notify  => Service["postgresql"],
@@ -112,7 +112,7 @@ define postgresql::hba (
 
     'absent': {
       augeas { "remove pg_hba ${name}":
-        context => "/files/var/lib/pgsql/data/pg_hba.conf/",
+        context => "/files/var/lib/pgsql/data/",
         changes => "rm ${xpath}",
         onlyif  => "match ${xpath} size == 1",
         notify  => Service["postgresql"],
