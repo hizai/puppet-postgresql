@@ -37,6 +37,8 @@ define postgresql::user(
 
   # Connection string
   $connection = "-h ${hostname} -p ${port} -U ${user}"
+	
+  Exec { path => "/bin:/sbin:/usr/bin:/usr/sbin" }
 
   case $ensure {
     present: {
@@ -45,32 +47,32 @@ define postgresql::user(
       # User with '-' like www-data must be inside double quotes
       exec { "Create postgres user $name":
         command => $password ? {
-          false => "/usr/bin/psql ${connection} -c \"CREATE USER \\\"$name\\\" \" ",
-          default => "/usr/bin/psql ${connection} -c \"CREATE USER \\\"$name\\\" PASSWORD '$password'\" ",
+          false => "psql ${connection} -c \"CREATE USER \\\"$name\\\" \" ",
+          default => "psql ${connection} -c \"CREATE USER \\\"$name\\\" PASSWORD '$password'\" ",
         },
         user    => "postgres",
-        unless  => "/usr/bin/psql ${connection} -c '\\du' | egrep '^  *$name '",
+        unless  => "psql ${connection} -c '\\du' | egrep '^  *$name '",
         require => Postgresql::Cluster["main"],
       }
 
       exec { "Set SUPERUSER attribute for postgres user $name":
-        command => "/usr/bin/psql ${connection} -c 'ALTER USER \"$name\" $superusertext' ",
+        command => "psql ${connection} -c 'ALTER USER \"$name\" $superusertext' ",
         user    => "postgres",
-        unless  => "/usr/bin/psql ${connection} -tc \"SELECT rolsuper FROM pg_roles WHERE rolname = '$name'\" |grep -q $(echo $superuser |cut -c 1)",
+        unless  => "psql ${connection} -tc \"SELECT rolsuper FROM pg_roles WHERE rolname = '$name'\" |grep -q $(echo $superuser |cut -c 1)",
         require => Exec["Create postgres user $name"],
       }
 
       exec { "Set CREATEDB attribute for postgres user $name":
-        command => "/usr/bin/psql ${connection} -c 'ALTER USER \"$name\" $createdbtext' ",
+        command => "psql ${connection} -c 'ALTER USER \"$name\" $createdbtext' ",
         user    => "postgres",
-        unless  => "/usr/bin/psql ${connection} -tc \"SELECT rolcreatedb FROM pg_roles WHERE rolname = '$name'\" |grep -q $(echo $createdb |cut -c 1)",
+        unless  => "psql ${connection} -tc \"SELECT rolcreatedb FROM pg_roles WHERE rolname = '$name'\" |grep -q $(echo $createdb |cut -c 1)",
         require => Exec["Create postgres user $name"],
       }
 
       exec { "Set CREATEROLE attribute for postgres user $name":
-        command => "/usr/bin/psql ${connection} -c 'ALTER USER \"$name\" $createroletext' ",
+        command => "psql ${connection} -c 'ALTER USER \"$name\" $createroletext' ",
         user    => "postgres",
-        unless  => "/usr/bin/psql ${connection} -tc \"SELECT rolcreaterole FROM pg_roles WHERE rolname = '$name'\" |grep -q $(echo $createrole |cut -c 1)",
+        unless  => "psql ${connection} -tc \"SELECT rolcreaterole FROM pg_roles WHERE rolname = '$name'\" |grep -q $(echo $createrole |cut -c 1)",
         require => Exec["Create postgres user $name"],
       }
 
@@ -82,7 +84,7 @@ define postgresql::user(
 
         # change only if it's not the same password
         exec { "Change password for postgres user $name":
-          command => "/usr/bin/psql ${connection} -c \"ALTER USER \\\"$name\\\" PASSWORD '$password' \"",
+          command => "psql ${connection} -c \"ALTER USER \\\"$name\\\" PASSWORD '$password' \"",
           user    => "postgres",
           unless  => "TMPFILE=$(mktemp /tmp/.pgpass.XXXXXX) && echo '${host}:${port}:template1:${name}:${pgpass}' > \$TMPFILE && PGPASSFILE=\$TMPFILE psql -h ${host} -p ${port} -U ${name} -c '\\q' template1 && rm -f \$TMPFILE",
           require => Exec["Create postgres user $name"],
@@ -93,9 +95,9 @@ define postgresql::user(
 
     absent:  {
       exec { "Remove postgres user $name":
-        command => "/usr/bin/psql ${connection} -c 'DROP USER \"$name\" ' ",
+        command => "psql ${connection} -c 'DROP USER \"$name\" ' ",
         user    => "postgres",
-        onlyif  => "/usr/bin/psql ${connection} -c '\\du' | grep '$name  *|'",
+        onlyif  => "psql ${connection} -c '\\du' | grep '$name  *|'",
         require => Postgresql::Cluster["main"],
       }
     }
