@@ -12,10 +12,13 @@ Requires:
 */
 class postgresql::centos::v8-4 {
 
-  $version = "84"
 
   case $lsbmajdistrelease {
+  
+
     "5" : {
+
+	  $version = "84"
 
       include postgresql::centos::base
 
@@ -38,6 +41,8 @@ class postgresql::centos::v8-4 {
     }
 
     "6" : {
+	
+	  $version = ""
 
       include postgresql::centos::base
 
@@ -54,7 +59,7 @@ class postgresql::centos::v8-4 {
       }
 
       package { "postgresql-server":
-        name => "postgresql-server",
+        name => "postgresql${version}-server",
         ensure => present,
       }
     }
