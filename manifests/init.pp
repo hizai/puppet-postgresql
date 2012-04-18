@@ -19,6 +19,7 @@ class postgresql {
     Centos: {
       case $lsbmajdistrelease {
         '5': { include postgresql::centos::v8-4 }
+		'6': { include postgresql::centos::v8-4 }
         default: { fail "postgresql module not implemented for ${operatingsystem}-$lsbmajdistrelease"}
       }
 	}
