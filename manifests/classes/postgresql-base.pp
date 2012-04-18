@@ -23,7 +23,7 @@ class postgresql::base {
     /RedHat|CentOS/: {
       case $lsbmajdistrelease {
 
-        "4","5": { }
+        "4","5","6": { }
 
         default: {
           package {"postgresql-server":
