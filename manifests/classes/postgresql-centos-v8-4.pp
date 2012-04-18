@@ -37,6 +37,30 @@ class postgresql::centos::v8-4 {
 	  }
     }
 
+  case $lsbmajdistrelease {
+    "6" : {
+
+      include postgresql::centos::base
+
+      Service["postgresql"] {
+        start   => "/sbin/service postgresql start",
+        status  => "/sbin/service postgresql status",
+        stop    => "/sbin/service postgresql stop",
+        restart => "/sbin/service postgresql restart",
+      }
+
+      service {"postgresql":
+        ensure    => running,
+        require   => [Package["postgresql-server"], Exec["init-db"]]
+      }
+
+      package { "postgresql-server":
+        name => "postgresql${version}-server",
+        ensure => present,
+      }
+    }
+
+
     default: {
       fail "postgresql ${version} not available for ${operatingsystem}/${lsbdistcodename}"
     }
