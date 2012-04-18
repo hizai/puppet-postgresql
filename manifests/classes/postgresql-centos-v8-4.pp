@@ -54,7 +54,7 @@ class postgresql::centos::v8-4 {
       }
 
       package { "postgresql-server":
-        name => "postgresql${version}-server",
+        name => "postgresql-server",
         ensure => present,
       }
     }
