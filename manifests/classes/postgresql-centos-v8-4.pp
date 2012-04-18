@@ -37,7 +37,6 @@ class postgresql::centos::v8-4 {
 	  }
     }
 
-  case $lsbmajdistrelease {
     "6" : {
 
       include postgresql::centos::base
@@ -59,7 +58,7 @@ class postgresql::centos::v8-4 {
         ensure => present,
       }
     }
-  }
+  
 
     default: {
       fail "postgresql ${version} not available for ${operatingsystem}/${lsbdistcodename}"
