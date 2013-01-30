@@ -20,7 +20,7 @@ class postgresql::base {
 
   case $operatingsystem {
 
-    /RedHat|CentOS/: {
+    /RedHat|Centos|CentOS/: {
       case $lsbmajdistrelease {
 
         "4","5","6": { }
